@@ -1,11 +1,10 @@
-package org.vld.template
+package org.vld.aop
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.vld.template.configuration.ApplicationConfiguration
 
 @SpringBootApplication
 open class Application : CommandLineRunner {
