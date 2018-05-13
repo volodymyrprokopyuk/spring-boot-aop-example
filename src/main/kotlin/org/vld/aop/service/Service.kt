@@ -78,6 +78,7 @@ class ArithmeticCalculatorImpl : ArithmeticCalculator {
     }
 
     override fun div(x: Double, y: Double): Double {
+        if (y == 0.0) throw IllegalArgumentException("Division by zero")
         val result = x / y
         logger.info(">> div($x, $y) = $result")
         return result

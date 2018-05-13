@@ -47,6 +47,11 @@ open class Application : CommandLineRunner {
         arithmeticCalculator.sub(1.0, 2.0)
         arithmeticCalculator.mul(1.0, 2.0)
         arithmeticCalculator.div(1.0, 2.0)
+        try {
+            arithmeticCalculator.div(1.0, 0.0)
+        } catch (ex: IllegalArgumentException) {
+            logger.error("$ex")
+        }
     }
 }
 

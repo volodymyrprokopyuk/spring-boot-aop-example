@@ -93,4 +93,7 @@ class ArithmeticCalculatorLogger {
 
     @AfterReturning(pointcut = "execution(double org.vld.aop.service.ArithmeticCalculator.*(..))", returning = "result")
     fun afterReturningFromOperation(result: Double) = logger.info("@AfterReturning result = $result")
+
+    @AfterThrowing(pointcut = "execution(* org.vld.aop.service.ArithmeticCalculator.div(..))", throwing = "ex")
+    fun afterThrowingFromOperation(ex: IllegalArgumentException) = logger.error("@AfterThrowing ex = $ex")
 }
