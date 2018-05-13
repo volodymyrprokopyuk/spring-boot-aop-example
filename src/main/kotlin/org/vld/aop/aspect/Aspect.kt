@@ -1,7 +1,9 @@
 package org.vld.aop.aspect
 
+import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.AfterThrowing
+import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
@@ -20,7 +22,7 @@ class Audience {
     @Pointcut("execution(* org.vld.aop.service.Performance.perform(..))")
     fun performPerformance() {}
 
-    @Before("performPerformance()")
+    /*@Before("performPerformance()")
     fun takeSeats() = logger.info("Taking seats")
 
     @Before("performPerformance()")
@@ -30,5 +32,17 @@ class Audience {
     fun applause() = logger.info("Applause")
 
     @AfterThrowing("performPerformance()")
-    fun demandRefund() = logger.info("Demanding a refund")
+    fun demandRefund() = logger.info("Demanding a refund")*/
+
+    @Around("performPerformance()")
+    fun watchPerformance(pjp: ProceedingJoinPoint) {
+        try {
+            logger.info("Taking seats")
+            logger.info("Silencing cell phones")
+            pjp.proceed()
+            logger.info("Applause")
+        } catch (ex: Throwable) {
+            logger.info("Demanding a refund")
+        }
+    }
 }
