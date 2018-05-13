@@ -1,5 +1,6 @@
 package org.vld.aop.aspect
 
+import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.AfterThrowing
@@ -77,4 +78,16 @@ class TrackCounter {
         trackCounts[trackNumber] = trackCount + 1
         logger.info("@Before TrackNumber = $trackNumber, TrackCount = ${trackCounts[trackNumber]}")
     }
+}
+
+@Aspect
+@Component
+class ArithmeticCalculatorLogger {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLogger::class.java)
+    }
+
+    @Before("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
+    fun beforeLogOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name} args = ${jp.args.toList()}")
 }

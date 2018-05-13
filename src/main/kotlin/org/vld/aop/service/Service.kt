@@ -44,3 +44,42 @@ class ConcertCompactDisc : CompactDisc {
 
     override fun playTrack(trackNumber: Int) = logger.info(">> Playing track $trackNumber")
 }
+
+interface ArithmeticCalculator {
+    fun add(x: Double, y: Double): Double
+    fun sub(x: Double, y: Double): Double
+    fun mul(x: Double, y: Double): Double
+    fun div(x: Double, y: Double): Double
+}
+
+@Component
+class ArithmeticCalculatorImpl : ArithmeticCalculator {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorImpl::class.java)
+    }
+
+    override fun add(x: Double, y: Double): Double {
+        val result = x + y
+        logger.info(">> add($x, $y) = $result")
+        return result
+    }
+
+    override fun sub(x: Double, y: Double): Double {
+        val result = x - y
+        logger.info(">> sub($x, $y) = $result")
+        return result
+    }
+
+    override fun mul(x: Double, y: Double): Double {
+        val result = x * y
+        logger.info(">> mul($x, $y) = $result")
+        return result
+    }
+
+    override fun div(x: Double, y: Double): Double {
+        val result = x / y
+        logger.info(">> div($x, $y) = $result")
+        return result
+    }
+}
