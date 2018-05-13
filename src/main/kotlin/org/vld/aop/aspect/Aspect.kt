@@ -89,5 +89,8 @@ class ArithmeticCalculatorLogger {
     }
 
     @Before("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
-    fun beforeLogOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name} args = ${jp.args.toList()}")
+    fun beforeOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name} args = ${jp.args.toList()}")
+
+    @AfterReturning(pointcut = "execution(double org.vld.aop.service.ArithmeticCalculator.*(..))", returning = "result")
+    fun afterReturningFromOperation(result: Double) = logger.info("@AfterReturning result = $result")
 }
