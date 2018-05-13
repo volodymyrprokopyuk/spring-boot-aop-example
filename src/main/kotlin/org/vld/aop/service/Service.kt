@@ -17,6 +17,20 @@ class ConcertPerformance : Performance {
     override fun perform() = logger.info(">> Performing concert performance")
 }
 
+interface Admirable {
+    fun showAdmiration()
+}
+
+@Component
+class ConcertAdmirable : Admirable {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(ConcertAdmirable::class.java)
+    }
+
+    override fun showAdmiration() = logger.info("@DeclareParents What a wonderful concert! Thank you very much!")
+}
+
 interface CompactDisc {
     fun playTrack(trackNumber: Int)
 }

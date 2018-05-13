@@ -6,10 +6,13 @@ import org.aspectj.lang.annotation.AfterThrowing
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
+import org.aspectj.lang.annotation.DeclareParents
 import org.aspectj.lang.annotation.Pointcut
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.vld.aop.service.Admirable
+import org.vld.aop.service.ConcertAdmirable
 
 @Aspect
 @Component
@@ -37,14 +40,22 @@ class Audience {
     @Around("performPerformance()")
     fun watchPerformance(pjp: ProceedingJoinPoint) {
         try {
-            logger.info("@Before Taking seats")
-            logger.info("@Before Silencing cell phones")
+            logger.info("@Around @Before Taking seats")
+            logger.info("@Around @Before Silencing cell phones")
             pjp.proceed()
-            logger.info("@AfterReturning Applause")
+            logger.info("@Around @AfterReturning Applause")
         } catch (ex: Throwable) {
-            logger.info("@AfterThrowing Demanding a refund")
+            logger.info("@Around @AfterThrowing Demanding a refund")
         }
     }
+}
+
+@Aspect
+@Component
+class AdmirableIntroducer {
+
+    @DeclareParents("org.vld.aop.service.Performance+", defaultImpl = ConcertAdmirable::class)
+    lateinit var admirable: Admirable
 }
 
 @Aspect
