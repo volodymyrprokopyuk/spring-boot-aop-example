@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.vld.aop.service.Admirable
 import org.vld.aop.service.ArithmeticCalculator
 import org.vld.aop.service.CompactDisc
+import org.vld.aop.service.MaxCalculator
+import org.vld.aop.service.MinCalculator
 import org.vld.aop.service.Performance
 
 @SpringBootApplication
@@ -52,6 +54,11 @@ open class Application : CommandLineRunner {
         } catch (ex: IllegalArgumentException) {
             logger.error("$ex")
         }
+
+        val minCalculator = arithmeticCalculator as MinCalculator
+        minCalculator.min(1.0, 2.0)
+        val maxCalculator = arithmeticCalculator as MaxCalculator
+        maxCalculator.max(1.0, 2.0)
     }
 }
 

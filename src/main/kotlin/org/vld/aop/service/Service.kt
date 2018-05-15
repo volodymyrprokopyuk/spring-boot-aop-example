@@ -86,3 +86,39 @@ class ArithmeticCalculatorImpl : ArithmeticCalculator {
         return result
     }
 }
+
+interface MinCalculator {
+    fun min(x: Double, y: Double): Double
+}
+
+@Component
+class MinCalculatorImpl : MinCalculator {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(MinCalculatorImpl::class.java)
+    }
+
+    override fun min(x: Double, y: Double): Double {
+        val result = if (x < y) x else y
+        logger.info(">> min ($x, $y) = $result")
+        return result
+    }
+}
+
+interface MaxCalculator {
+    fun max(x: Double, y: Double): Double
+}
+
+@Component
+class MaxCalculatorImpl : MaxCalculator {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(MaxCalculatorImpl::class.java)
+    }
+
+    override fun max(x: Double, y: Double): Double {
+        val result = if (x > y) x else y
+        logger.info(">> max ($x, $y) = $result")
+        return result
+    }
+}

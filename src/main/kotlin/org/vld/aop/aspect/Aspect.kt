@@ -15,6 +15,10 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.vld.aop.service.Admirable
 import org.vld.aop.service.ConcertAdmirable
+import org.vld.aop.service.MaxCalculator
+import org.vld.aop.service.MaxCalculatorImpl
+import org.vld.aop.service.MinCalculator
+import org.vld.aop.service.MinCalculatorImpl
 
 // ** AspectJ Pointcut Expression Language **
 
@@ -159,4 +163,15 @@ class LoggedAspect {
     fun beforeLogged(jp: JoinPoint) {
         logger.info("@Before @Logged method = ${jp.signature.name}, args = ${jp.args.toList()}")
     }
+}
+
+@Aspect
+@Component
+class MinMaxCalculatorIntroductionAspect {
+
+    @DeclareParents("org.vld.aop.service.ArithmeticCalculator+", defaultImpl = MinCalculatorImpl::class)
+    lateinit var minCalculator: MinCalculator
+
+    @DeclareParents("org.vld.aop.service.ArithmeticCalculator+", defaultImpl = MaxCalculatorImpl::class)
+    lateinit var maxCalculator: MaxCalculator
 }
