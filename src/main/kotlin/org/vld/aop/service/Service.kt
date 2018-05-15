@@ -3,6 +3,7 @@ package org.vld.aop.service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.vld.aop.annotation.Logged
 
 interface Performance {
     fun perform()
@@ -59,6 +60,7 @@ class ArithmeticCalculatorImpl : ArithmeticCalculator {
         val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorImpl::class.java)
     }
 
+    @Logged
     override fun add(x: Double, y: Double): Double {
         val result = x + y
         logger.info(">> add($x, $y) = $result")

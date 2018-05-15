@@ -16,6 +16,24 @@ import org.springframework.stereotype.Component
 import org.vld.aop.service.Admirable
 import org.vld.aop.service.ConcertAdmirable
 
+// ** AspectJ Pointcut Expression Language **
+
+// >> Method Signature Patterns (visibility modifiers, declaring type, method name, parameters types, return type)
+// execution(* org.vld.aop.service.ArithmeticCalculator.*(..))
+// execution(public * org.vld.aop.service.ArithmeticCalculator.*(..))
+// execution(public double org.vld.aop.service.ArithmeticCalculator.*(..))
+// execution(public double org.vld.aop.service.ArithmeticCalculator.*(double, ..))
+// execution(public double org.vld.aop.service.ArithmeticCalculator.*(double, double))
+
+// >> Custom @Annotation
+// @annotation(org.vld.aop.annotation.Logged)
+
+// >> Type Signature Patterns
+
+// >> Pointcut Expression Combinators
+
+// >> Pointcut Parameters Declarations
+
 @Aspect
 @Component
 class Audience {
@@ -90,7 +108,7 @@ class ArithmeticCalculatorLoggingAspect {
         val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLoggingAspect::class.java)
     }
 
-    @Pointcut("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
+    @Pointcut("execution(public double org.vld.aop.service.ArithmeticCalculator.*(double, double))")
     fun arithmeticCalculatorOperation() {}
 
     @Before("arithmeticCalculatorOperation()")
@@ -117,5 +135,20 @@ class ArithmeticCalculatorValidationAspect {
     fun validateBeforeDiv(jp: JoinPoint, x: Double, y: Double) {
         logger.info("@Before validating method = ${jp.signature.name}, x = $x, y = $y")
         if (y == 0.0) throw IllegalArgumentException("Validation: division by zero")
+    }
+}
+
+@Aspect
+@Order(5)
+@Component
+class LoggedAspect {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(LoggedAspect::class.java)
+    }
+
+    @Before("@annotation(org.vld.aop.annotation.Logged)")
+    fun beforeLogged(jp: JoinPoint) {
+        logger.info("@Before @Logged method = ${jp.signature.name}, args = ${jp.args.toList()}")
     }
 }
