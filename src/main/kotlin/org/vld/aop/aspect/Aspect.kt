@@ -29,10 +29,16 @@ import org.vld.aop.service.ConcertAdmirable
 // @annotation(org.vld.aop.annotation.Logged)
 
 // >> Type Signature Patterns
+// within(org.vld.aop.service.*) < all Join Points in a package
+// within(org.vld.aop.service..*) < all Join Points in a subpackage
+// within(org.vld.aop.service.ArithmeticCalculatorImpl) < all Join Points in a class
+// within(org.vld.aop.service.ArithmeticCalculator+) < all Join Poiints in all implementations of an interface
 
 // >> Pointcut Expression Combinators
+// Pointcut Expression &&, ||, ! Pointcut Expression
 
 // >> Pointcut Parameters Declarations
+// args(arg1, arg2)
 
 @Aspect
 @Component
@@ -108,7 +114,9 @@ class ArithmeticCalculatorLoggingAspect {
         val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLoggingAspect::class.java)
     }
 
-    @Pointcut("execution(public double org.vld.aop.service.ArithmeticCalculator.*(double, double))")
+    //@Pointcut("execution(public double org.vld.aop.service.ArithmeticCalculator.*(double, double))")
+    //@Pointcut("within(org.vld.aop.service.ArithmeticCalculatorImpl)")
+    @Pointcut("within(org.vld.aop.service.ArithmeticCalculator+)")
     fun arithmeticCalculatorOperation() {}
 
     @Before("arithmeticCalculatorOperation()")
