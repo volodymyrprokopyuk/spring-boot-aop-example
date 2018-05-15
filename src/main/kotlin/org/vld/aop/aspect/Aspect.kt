@@ -90,7 +90,10 @@ class ArithmeticCalculatorLoggingAspect {
         val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLoggingAspect::class.java)
     }
 
-    @Before("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
+    @Pointcut("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
+    fun arithmeticCalculatorOperation() {}
+
+    @Before("arithmeticCalculatorOperation()")
     fun beforeOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name}, args = ${jp.args.toList()}"
             + ", declaringType = ${jp.signature.declaringTypeName}, target = ${jp.target.javaClass.name}")
 
