@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.DeclareParents
 import org.aspectj.lang.annotation.Pointcut
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.vld.aop.service.Admirable
 import org.vld.aop.service.ConcertAdmirable
@@ -81,19 +82,37 @@ class TrackCounter {
 }
 
 @Aspect
+@Order(10)
 @Component
-class ArithmeticCalculatorLogger {
+class ArithmeticCalculatorLoggingAspect {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLogger::class.java)
+        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorLoggingAspect::class.java)
     }
 
     @Before("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
-    fun beforeOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name} args = ${jp.args.toList()}")
+    fun beforeOperation(jp: JoinPoint) = logger.info("@Before method = ${jp.signature.name}, args = ${jp.args.toList()}"
+            + ", declaringType = ${jp.signature.declaringTypeName}, target = ${jp.target.javaClass.name}")
 
     @AfterReturning(pointcut = "execution(double org.vld.aop.service.ArithmeticCalculator.*(..))", returning = "result")
     fun afterReturningFromOperation(result: Double) = logger.info("@AfterReturning result = $result")
 
     @AfterThrowing(pointcut = "execution(* org.vld.aop.service.ArithmeticCalculator.div(..))", throwing = "ex")
     fun afterThrowingFromOperation(ex: IllegalArgumentException) = logger.error("@AfterThrowing ex = $ex")
+}
+
+@Aspect
+@Order(20)
+@Component
+class ArithmeticCalculatorValidationAspect {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorValidationAspect::class.java)
+    }
+
+    @Before("execution(* org.vld.aop.service.ArithmeticCalculator.div(double, double)) && args(x, y)")
+    fun validateBeforeDiv(jp: JoinPoint, x: Double, y: Double) {
+        logger.info("@Before validating method = ${jp.signature.name}, x = $x, y = $y")
+        if (y == 0.0) throw IllegalArgumentException("Validation: division by zero")
+    }
 }
