@@ -15,6 +15,8 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.vld.aop.service.Admirable
 import org.vld.aop.service.ConcertAdmirable
+import org.vld.aop.service.Counter
+import org.vld.aop.service.CounterImpl
 import org.vld.aop.service.MaxCalculator
 import org.vld.aop.service.MaxCalculatorImpl
 import org.vld.aop.service.MinCalculator
@@ -43,6 +45,8 @@ import org.vld.aop.service.MinCalculatorImpl
 
 // >> Pointcut Parameters Declarations
 // args(arg1, arg2)
+// this(proxyObject)
+// target(originalObject)
 
 @Aspect
 @Component
@@ -174,4 +178,23 @@ class MinMaxCalculatorIntroductionAspect {
 
     @DeclareParents("org.vld.aop.service.ArithmeticCalculator+", defaultImpl = MaxCalculatorImpl::class)
     lateinit var maxCalculator: MaxCalculator
+}
+
+@Aspect
+@Component
+class ArithmeticCalculatorCountingAspect {
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(ArithmeticCalculatorCountingAspect::class.java)
+    }
+
+    @DeclareParents("org.vld.aop.service.ArithmeticCalculator+", defaultImpl = CounterImpl::class)
+    lateinit var counterIntroduction: Counter
+
+    @Before("execution(* org.vld.aop.service.ArithmeticCalculator.*(..))")
+    fun increaseCount(jp: JoinPoint) {
+        val counter = jp.`this` as Counter
+        counter.increase()
+        logger.info("@Before Counter count = ${counter.count}")
+    }
 }

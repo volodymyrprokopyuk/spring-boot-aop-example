@@ -122,3 +122,21 @@ class MaxCalculatorImpl : MaxCalculator {
         return result
     }
 }
+
+interface Counter {
+    val count: Int
+    fun increase()
+}
+
+@Component
+class CounterImpl: Counter {
+
+    private var internalCount: Int = 0
+
+    override val count: Int
+        get() = internalCount
+
+    override fun increase() {
+        ++internalCount
+    }
+}
